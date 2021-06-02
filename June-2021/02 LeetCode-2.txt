@@ -1,0 +1,58 @@
+Leetcode#570
+
+select distinct a.name as Name 
+from (select mgr.id, mgr.name, count(distinct emp.id)
+from employee emp
+join employee mgr
+on emp.ManagerId = mgr.id
+group by mgr.id, mgr.name
+having count(distinct emp.id) >= 5)  a
+
+
+
+Leetcode#571
+
+with temp_cte2 as (
+select 
+    number, frequency, 
+    sum(frequency) over(order by number rows between unbounded preceding and current row) as prev_sum,
+    sum(frequency) over(order by number rows between current row and unbounded following) as next_sum
+from numbers
+)
+select avg(number) as median 
+from temp_cte2
+where abs(prev_sum - next_sum) <= frequency
+
+
+
+
+Leetcode#574
+
+select a.name 
+from (select c.id, c.name, count(1) as cnt
+from candidate c
+join vote v
+on c.id = v.candidateid
+group by c.id, c.name
+order by count(1) desc
+limit 1) as a
+
+
+
+Leetcode#577
+
+select emp.name as name, bonus.bonus as bonus
+from employee emp
+left join bonus
+on emp.empid = bonus.empid
+where bonus.bonus < 1000
+or bonus.bonus is null
+
+
+
+Leetcode#584
+
+select name
+from customer
+where referee_id <> '2'
+or referee_id is null
